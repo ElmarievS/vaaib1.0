@@ -1,0 +1,226 @@
+<div class="collection-template" data-section-id="{{ section.id }}">
+  <div class="container">
+    {% if section.settings.show_collection_info %}
+      <div class="collection-header">
+        {% if section.settings.show_collection_image and collection.image %}
+          <div class="collection-image">
+            <img src="{{ collection.image | img_url: '1200x' }}"
+                 alt="{{ collection.title | escape }}"
+                 {% if section.settings.enable_lazy_loading %}loading="lazy"{% endif %}>
+          </div>
+        {% endif %}
+        
+        <div class="collection-info">
+          <h1 class="collection-title">{{ collection.title }}</h1>
+          {% if collection.description != blank and section.settings.show_description %}
+            <div class="collection-description rte">
+              {{ collection.description }}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    {% endif %}
+
+    <div class="collection-toolbar">
+      {% if section.settings.enable_sorting %}
+        <div class="collection-sorting">
+          <label for="SortBy">{{ 'collections.sorting.title' | t }}</label>
+          <select name="sort_by" id="SortBy">
+            {% assign sort_by = collection.sort_by | default: collection.default_sort_by %}
+            {% for option in collection.sort_options %}
+              <option value="{{ option.value }}" 
+                      {% if option.value == sort_by %}selected="selected"{% endif %}>
+                {{ option.name }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+      {% endif %}
+
+      {% if section.settings.enable_filters %}
+        <div class="collection-filters">
+          {% render 'collection-filters' %}
+        </div>
+      {% endif %}
+
+      {% if section.settings.enable_view_options %}
+        <div class="view-options">
+          <button class="view-grid" data-view="grid" aria-label="Grid view">
+            {% render 'icon-grid' %}
+          </button>
+          <button class="view-list" data-view="list" aria-label="List view">
+            {% render 'icon-list' %}
+          </button>
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="collection-grid" 
+         data-products-per-row="{{ section.settings.products_per_row }}"
+         data-view="{{ section.settings.default_view }}">
+      {% paginate collection.products by section.settings.products_per_page %}
+        {% if collection.products.size > 0 %}
+          {% for product in collection.products %}
+            {% render 'product-card',
+              product: product,
+              show_vendor: section.settings.show_vendor,
+              show_rating: section.settings.show_rating,
+              enable_quick_view: section.settings.enable_quick_view,
+              enable_quick_add: section.settings.enable_quick_add
+            %}
+          {% endfor %}
+          
+          {% if paginate.pages > 1 %}
+            {% render 'pagination', paginate: paginate %}
+          {% endif %}
+        {% else %}
+          <div class="collection-empty">
+            <p>{{ 'collections.general.no_matches' | t }}</p>
+          </div>
+        {% endif %}
+      {% endpaginate %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Collection Template",
+  "settings": [
+    {
+      "type": "header",
+      "content": "🎨 Layout Settings",
+      "info": "Configure collection page layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_collection_info",
+      "label": "Show collection information",
+      "default": true,
+      "info": "Display collection title and description"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_collection_image",
+      "label": "Show collection image",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "label": "Show description",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "🏷️ Product Display",
+      "info": "Configure product card settings"
+    },
+    {
+      "type": "range",
+      "id": "products_per_row",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "label": "Products per row",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "label": "Products per page",
+      "default": 24
+    },
+    {
+      "type": "select",
+      "id": "default_view",
+      "label": "Default view",
+      "options": [
+        {
+          "value": "grid",
+          "label": "Grid view"
+        },
+        {
+          "value": "list",
+          "label": "List view"
+        }
+      ],
+      "default": "grid",
+      "info": "Choose default product display layout"
+    },
+    {
+      "type": "header",
+      "content": "🔍 Filtering & Sorting",
+      "info": "Configure product organization options"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sorting",
+      "label": "Enable sorting",
+      "default": true,
+      "info": "Allow customers to sort products"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_filters",
+      "label": "Enable filtering",
+      "default": true,
+      "info": "Allow customers to filter products"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_view_options",
+      "label": "Enable view options",
+      "default": true,
+      "info": "Allow customers to switch between grid and list views"
+    },
+    {
+      "type": "header",
+      "content": "⚡ Product Card Features",
+      "info": "Configure product card display options"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "Show vendor",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_rating",
+      "label": "Show product rating",
+      "default": true,
+      "info": "Display product reviews rating"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_quick_view",
+      "label": "Enable quick view",
+      "default": true,
+      "info": "Allow customers to preview products"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_quick_add",
+      "label": "Enable quick add to cart",
+      "default": true,
+      "info": "Allow customers to add products without leaving collection"
+    },
+    {
+      "type": "header",
+      "content": "🚀 Performance",
+      "info": "Optimize page performance"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_lazy_loading",
+      "label": "Enable lazy loading",
+      "default": true,
+      "info": "Improve page load speed"
+    }
+  ]
+}
+{% endschema %}
