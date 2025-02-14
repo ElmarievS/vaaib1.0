@@ -1,0 +1,155 @@
+<div class="featured-collection" data-section-id="{{ section.id }}">
+  <div class="container">
+    {% if section.settings.title != blank %}
+      <div class="section-header">
+        <h2 class="section-title">{{ section.settings.title }}</h2>
+        {% if section.settings.subtitle != blank %}
+          <div class="section-subtitle">{{ section.settings.subtitle }}</div>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    {% assign collection = collections[section.settings.collection] %}
+    
+    <div class="products-grid" 
+         style="--products-per-row: {{ section.settings.products_per_row }};"
+         data-aos="fade-up"
+         data-aos-delay="150">
+      {% for product in collection.products limit: section.settings.products_to_show %}
+        {% render 'product-card',
+          product: product,
+          show_vendor: section.settings.show_vendor,
+          show_rating: section.settings.show_rating,
+          enable_quick_view: section.settings.enable_quick_view,
+          enable_quick_add: section.settings.enable_quick_add
+        %}
+      {% endfor %}
+    </div>
+
+    {% if section.settings.show_view_all and collection.all_products_count > section.settings.products_to_show %}
+      <div class="view-all-wrapper">
+        <a href="{{ collection.url }}" class="button {% if section.settings.view_all_style %}button--{{ section.settings.view_all_style }}{% endif %}">
+          {{ 'collections.general.view_all' | t }}
+        </a>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Featured Collection",
+  "settings": [
+    {
+      "type": "header",
+      "content": "📝 Content",
+      "info": "Select collection and customize display"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Featured Collection"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subheading"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "header",
+      "content": "🎨 Layout",
+      "info": "Customize the collection display"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 4,
+      "max": 12,
+      "step": 2,
+      "label": "Products to show",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "products_per_row",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "label": "Products per row",
+      "default": 4
+    },
+    {
+      "type": "header",
+      "content": "🛍️ Product Cards",
+      "info": "Configure product card display"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "Show vendor",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_rating",
+      "label": "Show rating",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_quick_view",
+      "label": "Enable quick view",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_quick_add",
+      "label": "Enable quick add",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "🔗 View All Link",
+      "info": "Configure the view all button"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show view all button",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "view_all_style",
+      "label": "Button style",
+      "options": [
+        {
+          "value": "primary",
+          "label": "Primary"
+        },
+        {
+          "value": "secondary",
+          "label": "Secondary"
+        },
+        {
+          "value": "outline",
+          "label": "Outline"
+        }
+      ],
+      "default": "primary"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Collection",
+      "category": "Collection"
+    }
+  ]
+}
+{% endschema %}
