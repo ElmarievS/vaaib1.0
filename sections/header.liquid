@@ -1,0 +1,131 @@
+<div data-section-id="{{ section.id }}" data-section-type="header">
+  <header class="site-header{% if section.settings.enable_sticky_header %} sticky{% endif %}">
+    <div class="container">
+      <div class="header-wrapper">
+        <!-- Logo -->
+        <div class="header-logo">
+          {% if template.name == 'index' %}
+            <h1 class="header-logo__heading">
+          {% else %}
+            <div class="header-logo__heading">
+          {% endif %}
+              
+          <a href="/" class="header-logo__link">
+            {% if section.settings.logo != blank %}
+              {% assign image_size = section.settings.logo_max_width | append: 'x' %}
+              <img src="{{ section.settings.logo | img_url: image_size }}"
+                   alt="{{ section.settings.logo.alt | default: shop.name }}"
+                   width="{{ section.settings.logo_max_width }}"
+                   height="{{ section.settings.logo.height | times: section.settings.logo_max_width | divided_by: section.settings.logo.width }}">
+            {% else %}
+              {{ shop.name }}
+            {% endif %}
+          </a>
+
+          {% if template.name == 'index' %}
+            </h1>
+          {% else %}
+            </div>
+          {% endif %}
+        </div>
+
+        <!-- Navigation -->
+        <nav class="header-nav" role="navigation">
+          {% if section.settings.enable_mega_menu %}
+            {% include 'mega-menu' %}
+          {% else %}
+            {% include 'navigation-menu' %}
+          {% endif %}
+        </nav>
+
+        <!-- Header Actions -->
+        <div class="header-actions">
+          {% if section.settings.enable_search %}
+            <div class="header-search">
+              {% include 'search-bar' %}
+            </div>
+          {% endif %}
+
+          {% if section.settings.enable_cart %}
+            {% include 'cart-icon' %}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </header>
+</div>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Logo Settings"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo image"
+    },
+    {
+      "type": "range",
+      "id": "logo_max_width",
+      "min": 50,
+      "max": 450,
+      "step": 10,
+      "unit": "px",
+      "label": "Logo width",
+      "default": 200
+    },
+    {
+      "type": "header",
+      "content": "Layout Options"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sticky_header",
+      "label": "Enable sticky header",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_mega_menu",
+      "label": "Enable mega menu",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Features"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_search",
+      "label": "Enable search",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_cart",
+      "label": "Enable cart icon",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Performance"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_lazy_loading",
+      "label": "Enable lazy loading",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_animations",
+      "label": "Enable animations",
+      "default": true
+    }
+  ]
+}
+{% endschema %}
