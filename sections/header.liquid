@@ -1,6 +1,15 @@
 <div data-section-id="{{ section.id }}" data-section-type="header">
-  <header class="site-header{% if section.settings.enable_sticky_header %} sticky{% endif %}" 
-          style="background-color: {{ section.settings.header_background }}">
+  {% if section.settings.enable_announcement %}
+    <div class="announcement-bar" style="background-color: {{ section.settings.announcement_bg }}">
+      <div class="container">
+        <p class="announcement-text" style="color: {{ section.settings.announcement_color }}">
+          {{ section.settings.announcement_text }}
+        </p>
+      </div>
+    </div>
+  {% endif %}
+
+  <header class="site-header{% if section.settings.enable_sticky %} sticky{% endif %}">
     <div class="container">
       <div class="header-wrapper">
         <!-- Logo -->
@@ -17,7 +26,7 @@
               <img src="{{ section.settings.logo | img_url: image_size }}"
                    alt="{{ section.settings.logo.alt | default: shop.name }}"
                    width="{{ section.settings.logo_max_width }}"
-                   {% if section.settings.enable_lazy_loading %}loading="lazy"{% endif %}>
+                   {% if settings.enable_lazy_loading %}loading="lazy"{% endif %}>
             {% else %}
               {{ shop.name }}
             {% endif %}
@@ -121,8 +130,7 @@
     {
       "type": "image_picker",
       "id": "logo",
-      "label": "Logo image",
-      "info": "Recommended size: 200 x 60px"
+      "label": "Logo image"
     },
     {
       "type": "range",
@@ -132,112 +140,116 @@
       "step": 10,
       "unit": "px",
       "label": "Logo width",
-      "default": 200,
-      "info": "Adjust your logo size for optimal display"
+      "default": 200
     },
     {
       "type": "checkbox",
       "id": "center_logo",
       "label": "Center logo",
-      "default": false,
-      "info": "Center align your logo for a balanced layout"
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "📢 Announcement Bar",
+      "info": "Add a promotional message"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_announcement",
+      "label": "Show announcement bar",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "announcement_text",
+      "label": "Announcement text",
+      "default": "Announce something here"
     },
     {
       "type": "color",
-      "id": "header_background",
+      "id": "announcement_bg",
       "label": "Background color",
-      "default": "#ffffff",
-      "info": "Choose a background color that matches your brand"
+      "default": "#1B3651"
+    },
+    {
+      "type": "color",
+      "id": "announcement_color",
+      "label": "Text color",
+      "default": "#FFFFFF"
     },
     {
       "type": "header",
-      "content": "⚡ Performance Features",
-      "info": "Optimize your header's performance"
+      "content": "⚡ Features",
+      "info": "Configure header functionality"
     },
     {
       "type": "checkbox",
-      "id": "enable_sticky_header",
+      "id": "enable_sticky",
       "label": "Enable sticky header",
-      "default": true,
-      "info": "Keep header visible while scrolling (Recommended for better navigation)"
-    },
-    {
-      "type": "checkbox",
-      "id": "enable_lazy_loading",
-      "label": "Enable lazy loading",
-      "default": true,
-      "info": "Improve page load speed by loading images only when needed"
-    },
-    {
-      "type": "header",
-      "content": "🔍 Search & Navigation",
-      "info": "Configure search and menu options"
-    },
-    {
-      "type": "checkbox",
-      "id": "enable_search",
-      "label": "Enable search",
-      "default": true,
-      "info": "Add a search function to help customers find products"
-    },
-    {
-      "type": "link_list",
-      "id": "menu",
-      "label": "Menu",
-      "default": "main-menu",
-      "info": "Select which menu to display in header"
+      "default": true
     },
     {
       "type": "checkbox",
       "id": "enable_mega_menu",
       "label": "Enable mega menu",
-      "default": false,
-      "info": "Transform dropdowns into mega menus (Better for large catalogs)"
+      "default": false
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "default": "main-menu"
     },
     {
       "type": "header",
-      "content": "👤 Account Features",
-      "info": "Customize account display options"
+      "content": "🔍 Search",
+      "info": "Configure search options"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_search",
+      "label": "Enable search",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "👤 Account",
+      "info": "Configure account display"
     },
     {
       "type": "checkbox",
       "id": "enable_account",
       "label": "Show account icon",
-      "default": true,
-      "info": "Display account login/dashboard link"
+      "default": true
     },
     {
       "type": "checkbox",
       "id": "show_account_label",
       "label": "Show account text",
-      "default": false,
-      "info": "Display 'Account' text beside icon"
+      "default": false
     },
     {
       "type": "header",
-      "content": "🛒 Cart Features",
-      "info": "Configure cart display options"
+      "content": "🛒 Cart",
+      "info": "Configure cart display"
     },
     {
       "type": "checkbox",
       "id": "enable_cart",
       "label": "Show cart icon",
-      "default": true,
-      "info": "Display shopping cart icon"
+      "default": true
     },
     {
       "type": "checkbox",
       "id": "enable_cart_drawer",
       "label": "Enable cart drawer",
-      "default": true,
-      "info": "Show cart as a sidebar (Recommended for better conversion)"
+      "default": true
     },
     {
       "type": "checkbox",
       "id": "show_cart_count",
       "label": "Show cart count",
-      "default": true,
-      "info": "Display number of items in cart"
+      "default": true
     }
   ]
 }
