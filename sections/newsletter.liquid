@@ -1,0 +1,207 @@
+<div class="newsletter-section" 
+     data-section-id="{{ section.id }}"
+     data-section-type="newsletter"
+     style="background-color: {{ section.settings.background_color }}">
+  <div class="container">
+    <div class="newsletter-content" style="text-align: {{ section.settings.text_alignment }}">
+      {% if section.settings.title != blank %}
+        <h2 class="section-title">{{ section.settings.title }}</h2>
+      {% endif %}
+
+      {% if section.settings.subtitle != blank %}
+        <div class="section-subtitle">{{ section.settings.subtitle }}</div>
+      {% endif %}
+
+      {% if section.settings.show_perks %}
+        <div class="newsletter-perks">
+          {% for block in section.blocks %}
+            {% if block.type == 'perk' %}
+              <div class="perk-item">
+                {% if block.settings.icon != blank %}
+                  <img src="{{ block.settings.icon | img_url: '50x50' }}" 
+                       alt="{{ block.settings.text }}"
+                       width="25" 
+                       height="25"
+                       loading="lazy">
+                {% endif %}
+                <span>{{ block.settings.text }}</span>
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      {% form 'customer', class: 'newsletter-form' %}
+        <input type="hidden" name="contact[tags]" value="newsletter">
+        <div class="form-group">
+          <input type="email" 
+                 name="contact[email]" 
+                 class="input-field"
+                 placeholder="{{ section.settings.placeholder_text }}"
+                 required>
+          <button type="submit" class="button button--{{ section.settings.button_style }}">
+            {{ section.settings.button_text }}
+          </button>
+        </div>
+        {% if section.settings.show_disclaimer %}
+          <div class="newsletter-disclaimer">
+            {{ section.settings.disclaimer_text }}
+          </div>
+        {% endif %}
+      {% endform %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Newsletter",
+  "settings": [
+    {
+      "type": "header",
+      "content": "📝 Content",
+      "info": "Customize newsletter content"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Subscribe to our newsletter"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subheading",
+      "default": "Sign up for exclusive offers and updates"
+    },
+    {
+      "type": "header",
+      "content": "🎨 Style",
+      "info": "Customize section appearance"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#f7f7f7"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "📮 Form Settings",
+      "info": "Customize form appearance"
+    },
+    {
+      "type": "text",
+      "id": "placeholder_text",
+      "label": "Email placeholder",
+      "default": "Enter your email"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Subscribe"
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "Button style",
+      "options": [
+        {
+          "value": "primary",
+          "label": "Primary"
+        },
+        {
+          "value": "secondary",
+          "label": "Secondary"
+        }
+      ],
+      "default": "primary"
+    },
+    {
+      "type": "header",
+      "content": "✨ Additional Features",
+      "info": "Add extra content elements"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_perks",
+      "label": "Show perks",
+      "default": true,
+      "info": "Display subscription benefits"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_disclaimer",
+      "label": "Show disclaimer",
+      "default": true
+    },
+    {
+      "type": "richtext",
+      "id": "disclaimer_text",
+      "label": "Disclaimer text",
+      "default": "<p>By subscribing you agree to receive marketing emails. You can unsubscribe at any time.</p>"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "perk",
+      "name": "Perk",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Exclusive Offers"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Newsletter",
+      "blocks": [
+        {
+          "type": "perk",
+          "settings": {
+            "text": "Exclusive Offers"
+          }
+        },
+        {
+          "type": "perk",
+          "settings": {
+            "text": "New Arrivals"
+          }
+        },
+        {
+          "type": "perk",
+          "settings": {
+            "text": "Subscriber-Only Discounts"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
