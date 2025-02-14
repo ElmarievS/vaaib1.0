@@ -1,0 +1,52 @@
+<div class="blog-section">
+  <h1 class="section-title">{{ section.settings.title | default: 'Latest blog' }}</h1>
+  
+  <div class="blog-grid">
+    {% for article in blogs[section.settings.blog].articles limit: 4 %}
+      <div class="blog-card">
+        {% if article.image %}
+          <div class="blog-card__image">
+            <img src="{{ article.image | img_url: '400x' }}"
+                 alt="{{ article.title }}"
+                 loading="lazy">
+            <div class="date-badge">
+              {{ article.published_at | date: '%d' }}
+              <span>{{ article.published_at | date: '%b' }}</span>
+            </div>
+          </div>
+        {% endif %}
+        
+        <div class="blog-card__content">
+          <h3>{{ article.title }}</h3>
+          <p>{{ article.excerpt_or_content | strip_html | truncatewords: 15 }}</p>
+          <a href="{{ article.url }}" class="read-more">Read More »</a>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Blog Posts",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title",
+      "default": "Latest blog"
+    },
+    {
+      "type": "blog",
+      "id": "blog",
+      "label": "Blog"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Blog Posts",
+      "category": "Blog"
+    }
+  ]
+}
+{% endschema %}
