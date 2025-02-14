@@ -1,0 +1,207 @@
+<div class="testimonials-section" 
+     data-section-id="{{ section.id }}"
+     data-section-type="testimonials"
+     style="background-color: {{ section.settings.background_color }}">
+  <div class="container">
+    {% if section.settings.title != blank %}
+      <div class="section-header">
+        <h2 class="section-title">{{ section.settings.title }}</h2>
+        {% if section.settings.subtitle != blank %}
+          <div class="section-subtitle">{{ section.settings.subtitle }}</div>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <div class="testimonials-slider" 
+         data-slider
+         data-autoplay="{{ section.settings.enable_autoplay }}"
+         data-speed="{{ section.settings.autoplay_speed }}">
+      {% for block in section.blocks %}
+        <div class="testimonial-item" {{ block.shopify_attributes }}>
+          {% if block.settings.image != blank %}
+            <div class="testimonial-image">
+              <img src="{{ block.settings.image | img_url: '200x' }}"
+                   alt="{{ block.settings.author | escape }}"
+                   width="100"
+                   height="100"
+                   loading="lazy">
+            </div>
+          {% endif %}
+          
+          <div class="testimonial-content">
+            {% if block.settings.rating > 0 %}
+              <div class="testimonial-rating">
+                {% render 'rating-stars', rating: block.settings.rating %}
+              </div>
+            {% endif %}
+            
+            <blockquote>{{ block.settings.quote }}</blockquote>
+            
+            <div class="testimonial-author">
+              <cite>{{ block.settings.author }}</cite>
+              {% if block.settings.author_title != blank %}
+                <span class="author-title">{{ block.settings.author_title }}</span>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+
+    {% if section.settings.show_trust_badges %}
+      <div class="trust-badges">
+        {% if section.settings.total_reviews %}
+          <div class="trust-badge">
+            <span class="number">{{ section.settings.total_reviews }}</span>
+            <span class="label">Happy Customers</span>
+          </div>
+        {% endif %}
+        
+        {% if section.settings.average_rating %}
+          <div class="trust-badge">
+            <span class="number">{{ section.settings.average_rating }}</span>
+            <span class="label">Average Rating</span>
+          </div>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Testimonials",
+  "settings": [
+    {
+      "type": "header",
+      "content": "📝 Content",
+      "info": "Add section heading and content"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "What Our Customers Say"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subheading",
+      "info": "Optional explanatory text"
+    },
+    {
+      "type": "header",
+      "content": "🎨 Style",
+      "info": "Customize the section appearance"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#f7f7f7"
+    },
+    {
+      "type": "header",
+      "content": "⚙️ Slider Settings",
+      "info": "Configure slider behavior"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_autoplay",
+      "label": "Enable autoplay",
+      "default": true,
+      "info": "Automatically rotate through testimonials"
+    },
+    {
+      "type": "range",
+      "id": "autoplay_speed",
+      "min": 3,
+      "max": 8,
+      "step": 1,
+      "unit": "s",
+      "label": "Rotation speed",
+      "default": 5
+    },
+    {
+      "type": "header",
+      "content": "🏆 Trust Indicators",
+      "info": "Add social proof elements"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_trust_badges",
+      "label": "Show trust badges",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "total_reviews",
+      "label": "Total reviews count",
+      "info": "Display total number of reviews"
+    },
+    {
+      "type": "text",
+      "id": "average_rating",
+      "label": "Average rating",
+      "info": "Display average customer rating"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Author image"
+        },
+        {
+          "type": "textarea",
+          "id": "quote",
+          "label": "Quote",
+          "default": "Share what your customers are saying about your products"
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Author name",
+          "default": "Customer Name"
+        },
+        {
+          "type": "text",
+          "id": "author_title",
+          "label": "Author title",
+          "info": "Optional author description or location"
+        },
+        {
+          "type": "range",
+          "id": "rating",
+          "min": 0,
+          "max": 5,
+          "step": 1,
+          "label": "Rating",
+          "default": 5,
+          "info": "Set to 0 to hide rating"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Testimonials",
+      "blocks": [
+        {
+          "type": "testimonial"
+        },
+        {
+          "type": "testimonial"
+        },
+        {
+          "type": "testimonial"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
