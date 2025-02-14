@@ -1,0 +1,292 @@
+<div class="hero-banner{% if section.settings.full_width %} hero-banner--full{% endif %}" 
+     data-section-id="{{ section.id }}"
+     data-section-type="hero-banner"
+     style="{% if section.settings.custom_height %}min-height: {{ section.settings.banner_height }}px;{% endif %}">
+  
+  {% if section.settings.image != blank %}
+    <div class="hero-banner__image-wrapper">
+      <img src="{{ section.settings.image | img_url: 'master' }}"
+           alt="{{ section.settings.title | escape }}"
+           class="hero-banner__image{% if section.settings.enable_parallax %} parallax{% endif %}"
+           {% if section.settings.enable_lazy_loading %}loading="lazy"{% endif %}
+           {% if section.settings.enable_image_optimization %}
+           srcset="{{ section.settings.image | img_url: '800x' }} 800w,
+                   {{ section.settings.image | img_url: '1200x' }} 1200w,
+                   {{ section.settings.image | img_url: '1600x' }} 1600w,
+                   {{ section.settings.image | img_url: '2000x' }} 2000w"
+           sizes="100vw"{% endif %}>
+    </div>
+  {% endif %}
+  
+  <div class="hero-banner__content{% if section.settings.text_alignment %} text-{{ section.settings.text_alignment }}{% endif %}"
+       style="background-color: {{ section.settings.overlay_color | color_modify: 'alpha', section.settings.overlay_opacity }}">
+    <div class="container">
+      {% if section.settings.title != blank %}
+        <h1 class="hero-banner__title"
+            style="font-size: {{ section.settings.heading_size }}px; color: {{ section.settings.text_color }}">
+          {{ section.settings.title }}
+        </h1>
+      {% endif %}
+      
+      {% if section.settings.subtitle != blank %}
+        <div class="hero-banner__subtitle" style="color: {{ section.settings.text_color }}">
+          {{ section.settings.subtitle }}
+        </div>
+      {% endif %}
+      
+      {% if section.settings.button_label != blank %}
+        <div class="hero-banner__button-wrapper">
+          <a href="{{ section.settings.button_link }}" 
+             class="button {% if section.settings.button_style %}button--{{ section.settings.button_style }}{% endif %}"
+             {% if section.settings.enable_button_animation %}data-animate="true"{% endif %}
+             style="{% if section.settings.button_color %}background-color: {{ section.settings.button_color }};{% endif %}">
+            {{ section.settings.button_label }}
+          </a>
+          
+          {% if section.settings.show_secondary_button %}
+            <a href="{{ section.settings.secondary_button_link }}" 
+               class="button button--secondary">
+              {{ section.settings.secondary_button_label }}
+            </a>
+          {% endif %}
+        </div>
+      {% endif %}
+      
+      {% if section.settings.show_trust_badges %}
+        <div class="hero-banner__trust-badges">
+          {% for block in section.blocks %}
+            {% if block.type == 'trust_badge' %}
+              <div class="trust-badge">
+                {% if block.settings.icon %}
+                  <img src="{{ block.settings.icon | img_url: '50x' }}" 
+                       alt="{{ block.settings.text }}"
+                       width="25"
+                       height="25">
+                {% endif %}
+                <span>{{ block.settings.text }}</span>
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Hero Banner",
+  "settings": [
+    {
+      "type": "header",
+      "content": "🖼️ Image Settings",
+      "info": "Configure your banner image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Banner image",
+      "info": "Recommended size: 2000 x 800px"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_parallax",
+      "label": "Enable parallax effect",
+      "default": true,
+      "info": "Add depth with a subtle scrolling effect"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_lazy_loading",
+      "label": "Enable lazy loading",
+      "default": true,
+      "info": "Improve page load speed"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_image_optimization",
+      "label": "Enable image optimization",
+      "default": true,
+      "info": "Automatically serve the right image size"
+    },
+    {
+      "type": "header",
+      "content": "📏 Layout Options",
+      "info": "Customize banner dimensions"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full width",
+      "default": true,
+      "info": "Extend banner to screen edges"
+    },
+    {
+      "type": "checkbox",
+      "id": "custom_height",
+      "label": "Custom height",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "banner_height",
+      "min": 300,
+      "max": 1000,
+      "step": 50,
+      "unit": "px",
+      "label": "Banner height",
+      "default": 500,
+      "info": "Set custom banner height"
+    },
+    {
+      "type": "header",
+      "content": "📝 Content Settings",
+      "info": "Configure banner text and buttons"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Welcome to our store"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 24,
+      "max": 84,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading size",
+      "default": 48
+    },
+    {
+      "type": "richtext",
+      "id": "subtitle",
+      "label": "Subheading",
+      "default": "<p>Share your store message</p>"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "header",
+      "content": "🎯 CTA Buttons",
+      "info": "Configure call-to-action buttons"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button text",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "Button style",
+      "options": [
+        {
+          "value": "primary",
+          "label": "Primary"
+        },
+        {
+          "value": "secondary",
+          "label": "Secondary"
+        },
+        {
+          "value": "outline",
+          "label": "Outline"
+        }
+      ],
+      "default": "primary"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_button_animation",
+      "label": "Enable button animation",
+      "default": true,
+      "info": "Add subtle hover effects"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_secondary_button",
+      "label": "Show secondary button",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "secondary_button_label",
+      "label": "Secondary button text"
+    },
+    {
+      "type": "url",
+      "id": "secondary_button_link",
+      "label": "Secondary button link"
+    },
+    {
+      "type": "header",
+      "content": "🛡️ Trust Elements",
+      "info": "Add trust-building elements"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_trust_badges",
+      "label": "Show trust badges",
+      "default": false,
+      "info": "Display trust-building elements below content"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "trust_badge",
+      "name": "Trust Badge",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Free Shipping"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero Banner",
+      "category": "Image"
+    }
+  ]
+}
+{% endschema %}
