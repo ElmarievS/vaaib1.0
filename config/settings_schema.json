@@ -8,31 +8,200 @@
     "theme_support_url": ""
   },
   {
-    "name": "Colors",
+    "name": "🎨 Colors",
     "settings": [
       {
         "type": "color",
         "id": "primary_color",
         "label": "Primary Color",
-        "default": "#1B3651"
+        "default": "#1B3651",
+        "info": "Main brand color, used for buttons and accents"
       },
       {
         "type": "color",
-        "id": "accent_color",
-        "label": "Accent Color",
-        "default": "#F47458"
+        "id": "secondary_color",
+        "label": "Secondary Color",
+        "default": "#F47458",
+        "info": "Complementary color for additional elements"
       },
       {
         "type": "color",
         "id": "text_color",
         "label": "Text Color",
-        "default": "#000000"
+        "default": "#000000",
+        "info": "Main text color throughout the site"
       },
       {
         "type": "color",
         "id": "background_color",
         "label": "Background Color",
-        "default": "#FFFFFF"
+        "default": "#FFFFFF",
+        "info": "Main background color"
+      }
+    ]
+  },
+  {
+    "name": "⚡ Performance",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Loading Optimizations"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_lazy_loading",
+        "label": "Enable lazy loading",
+        "default": true,
+        "info": "Improve page load speed by loading images only when needed"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_image_optimization",
+        "label": "Enable image optimization",
+        "default": true,
+        "info": "Automatically optimize and compress images"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_critical_css",
+        "label": "Enable critical CSS",
+        "default": true,
+        "info": "Load essential styles first for faster initial render"
+      }
+    ]
+  },
+  {
+    "name": "🛍️ Product Cards",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Display Options"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_vendor",
+        "label": "Show vendor",
+        "default": false,
+        "info": "Display product manufacturer or brand"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_rating",
+        "label": "Show product rating",
+        "default": true,
+        "info": "Display product review stars"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_color_swatches",
+        "label": "Show color swatches",
+        "default": true,
+        "info": "Display color options on product cards"
+      },
+      {
+        "type": "header",
+        "content": "Quick Shop Features"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_quick_view",
+        "label": "Enable quick view",
+        "default": true,
+        "info": "Allow customers to preview products without leaving the page"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_quick_add",
+        "label": "Enable quick add to cart",
+        "default": true,
+        "info": "Allow customers to add products directly from collection pages"
+      },
+      {
+        "type": "header",
+        "content": "Inventory Display"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_inventory_notice",
+        "label": "Show low stock notice",
+        "default": true,
+        "info": "Display warning when product stock is low"
+      },
+      {
+        "type": "range",
+        "id": "low_inventory_threshold",
+        "min": 1,
+        "max": 20,
+        "step": 1,
+        "label": "Low inventory threshold",
+        "default": 5,
+        "info": "Show low stock notice when inventory reaches this number"
+      }
+    ]
+  },
+  {
+    "name": "🛒 Cart",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "enable_cart_drawer",
+        "label": "Enable cart drawer",
+        "default": true,
+        "info": "Show cart as a sidebar instead of new page (Recommended for better conversion)"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_sticky_cart",
+        "label": "Enable sticky add to cart",
+        "default": true,
+        "info": "Keep add to cart button visible while scrolling on product pages"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_free_shipping_message",
+        "label": "Show free shipping message",
+        "default": true,
+        "info": "Display progress towards free shipping threshold"
+      },
+      {
+        "type": "text",
+        "id": "free_shipping_threshold",
+        "label": "Free shipping threshold",
+        "default": "50",
+        "info": "Amount needed to qualify for free shipping"
+      }
+    ]
+  },
+  {
+    "name": "🎯 Conversion Features",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "enable_wishlist",
+        "label": "Enable wishlist",
+        "default": true,
+        "info": "Allow customers to save products for later"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_recently_viewed",
+        "label": "Enable recently viewed",
+        "default": true,
+        "info": "Show recently viewed products"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_sale_badge",
+        "label": "Show sale badge",
+        "default": true,
+        "info": "Display sale badge on discounted products"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_saving_amount",
+        "label": "Show saving amount",
+        "default": true,
+        "info": "Display amount saved on sale items"
       }
     ]
   }
