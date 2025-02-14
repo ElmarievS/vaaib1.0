@@ -1,0 +1,98 @@
+<div class="product-template" data-section-id="{{ section.id }}" data-section-type="product">
+  <div class="container">
+    {% if section.settings.enable_breadcrumb %}
+      {% include 'breadcrumb' %}
+    {% endif %}
+
+    <div class="product-layout">
+      <div class="product-media">
+        <div class="product-gallery">
+          {% for image in product.images %}
+            <div class="product-gallery__item">
+              <img src="{{ image | img_url: 'large' }}" 
+                   alt="{{ image.alt | escape }}"
+                   loading="lazy"
+                   data-product-image
+                   {% if forloop.first %}class="active"{% endif %}>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="product-info">
+        <h1 class="product-title">{{ product.title }}</h1>
+        
+        {% if section.settings.show_vendor %}
+          <div class="product-vendor">{{ product.vendor }}</div>
+        {% endif %}
+
+        <div class="product-price">
+          <span class="price" data-product-price>
+            {{ current_variant.price | money }}
+          </span>
+          
+          {% if product.compare_at_price_max > product.price %}
+            <span class="compare-price">
+              {{ current_variant.compare_at_price | money }}
+            </span>
+          {% endif %}
+        </div>
+
+        {% form 'product', product %}
+          <select name="id" id="ProductSelect" class="product-form__variants">
+            {% for variant in product.variants %}
+              <option value="{{ variant.id }}"
+                      {% if variant == current_variant %}selected="selected"{% endif %}>
+                {{ variant.title }} - {{ variant.price | money }}
+              </option>
+            {% endfor %}
+          </select>
+
+          <div class="product-form__buttons">
+            <button type="submit" 
+                    class="button button--primary"
+                    {% unless current_variant.available %}disabled{% endunless %}>
+              {% if current_variant.available %}
+                {{ 'products.product.add_to_cart' | t }}
+              {% else %}
+                {{ 'products.product.sold_out' | t }}
+              {% endif %}
+            </button>
+          </div>
+        {% endform %}
+
+        {% if section.settings.show_description %}
+          <div class="product-description rte">
+            {{ product.description }}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Product pages",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_breadcrumb",
+      "label": "Show breadcrumb",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "Show vendor",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "label": "Show description",
+      "default": true
+    }
+  ]
+}
+{% endschema %}
