@@ -1,5 +1,62 @@
+{% comment %}
+  Main Homepage Template
+  - Configurable sections with CRO optimizations
+  - Performance-optimized loading sequence
+  - Mobile-responsive layout
+{% endcomment %}
+
 {% section 'announcement-bar' %}
-{% section 'hero-banner' %}
-{% section 'featured-collection' %}
-{% section 'blog-posts' %}
-{% section 'thank-you' %}
+
+{% if settings.enable_hero_banner %}
+  {% section 'hero-banner' %}
+{% endif %}
+
+{% if settings.enable_featured_collection %}
+  {% section 'featured-collection' %}
+{% endif %}
+
+{% if settings.enable_product_highlights %}
+  {% section 'product-highlights' %}
+{% endif %}
+
+{% if settings.enable_testimonials %}
+  {% section 'testimonials' %}
+{% endif %}
+
+{% if settings.enable_promotion_grid %}
+  {% section 'promotion-grid' %}
+{% endif %}
+
+{% if settings.enable_blog_posts %}
+  {% section 'blog-posts' %}
+{% endif %}
+
+{% if settings.enable_instagram_feed %}
+  {% section 'instagram-feed' %}
+{% endif %}
+
+{% if settings.enable_newsletter %}
+  {% section 'newsletter' %}
+{% endif %}
+
+{% if settings.enable_trust_badges %}
+  {% section 'trust-badges' %}
+{% endif %}
+
+{% if settings.enable_recently_viewed and request.page_type == 'index' %}
+  {% section 'recently-viewed-products' %}
+{% endif %}
+
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "WebSite",
+  "name": {{ shop.name | json }},
+  "url": {{ shop.url | json }},
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "{{ shop.url }}/search?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
