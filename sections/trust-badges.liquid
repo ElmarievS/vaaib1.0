@@ -1,0 +1,170 @@
+<div class="trust-badges" 
+     data-section-id="{{ section.id }}"
+     data-section-type="trust-badges"
+     style="background-color: {{ section.settings.background_color }}">
+  <div class="container">
+    {% if section.settings.title != blank %}
+      <div class="section-header">
+        <h2 class="section-title">{{ section.settings.title }}</h2>
+        {% if section.settings.subtitle != blank %}
+          <div class="section-subtitle">{{ section.settings.subtitle }}</div>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <div class="badges-grid" 
+         style="--grid-columns: {{ section.settings.columns_desktop }};">
+      {% for block in section.blocks %}
+        <div class="badge-item" 
+             {{ block.shopify_attributes }}
+             {% if settings.enable_animation %}
+             data-aos="fade-up"
+             data-aos-delay="{{ forloop.index | times: 150 }}"
+             {% endif %}>
+          {% if block.settings.icon != blank %}
+            <div class="badge-icon">
+              <img src="{{ block.settings.icon | img_url: '100x' }}"
+                   alt="{{ block.settings.title | escape }}"
+                   width="50"
+                   height="50"
+                   loading="lazy">
+            </div>
+          {% endif %}
+          
+          <div class="badge-content">
+            <h3>{{ block.settings.title }}</h3>
+            {% if block.settings.text != blank %}
+              <p>{{ block.settings.text }}</p>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Trust Badges",
+  "settings": [
+    {
+      "type": "header",
+      "content": "📝 Content",
+      "info": "Add section heading and content"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Why Choose Us"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subheading",
+      "default": "Shop with confidence"
+    },
+    {
+      "type": "header",
+      "content": "🎨 Layout",
+      "info": "Customize section appearance"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "label": "Columns on desktop",
+      "default": 4
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "select",
+      "id": "style",
+      "label": "Style",
+      "options": [
+        {
+          "value": "simple",
+          "label": "Simple"
+        },
+        {
+          "value": "boxed",
+          "label": "Boxed"
+        },
+        {
+          "value": "bordered",
+          "label": "Bordered"
+        }
+      ],
+      "default": "simple"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "trust_badge",
+      "name": "Trust Badge",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon",
+          "info": "50 x 50px recommended"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Free Shipping"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "On all orders over $50"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Trust Badges",
+      "blocks": [
+        {
+          "type": "trust_badge",
+          "settings": {
+            "title": "Free Shipping",
+            "text": "On all orders over $50"
+          }
+        },
+        {
+          "type": "trust_badge",
+          "settings": {
+            "title": "Secure Payment",
+            "text": "100% secure checkout"
+          }
+        },
+        {
+          "type": "trust_badge",
+          "settings": {
+            "title": "24/7 Support",
+            "text": "Here to help anytime"
+          }
+        },
+        {
+          "type": "trust_badge",
+          "settings": {
+            "title": "Easy Returns",
+            "text": "30-day return policy"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
