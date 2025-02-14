@@ -1,0 +1,166 @@
+<div class="thank-you-section" data-section-id="{{ section.id }}">
+  <div class="container">
+    {% if customer %}
+      <h1 class="thank-you__title">Thank you, {{ customer.first_name }}!</h1>
+    {% else %}
+      <h1 class="thank-you__title">Thank you for your order!</h1>
+    {% endif %}
+
+    <div class="thank-you__content">
+      <!-- Order Summary -->
+      <div class="order-summary">
+        <h2>Order #{{ order.number }}</h2>
+        <p class="delivery-estimate">Estimated delivery: {{ order.created_at | date: '%b %d' | plus: 7 | date: '%b %d' }}</p>
+        {% if order.tracking_number %}
+          <a href="{{ order.tracking_url }}" class="button button--secondary">Track Your Order</a>
+        {% endif %}
+      </div>
+
+      <!-- Customer Support -->
+      <div class="support-options">
+        <h3>Need Help?</h3>
+        <div class="support-links">
+          {% if section.settings.whatsapp_number %}
+            <a href="https://wa.me/{{ section.settings.whatsapp_number }}" class="support-link">
+              <span class="icon">{% render 'icon-whatsapp' %}</span>
+              WhatsApp Support
+            </a>
+          {% endif %}
+          <a href="mailto:{{ shop.email }}" class="support-link">
+            <span class="icon">{% render 'icon-email' %}</span>
+            Email Us
+          </a>
+        </div>
+      </div>
+
+      {% if section.settings.show_next_order_discount %}
+        <div class="next-order-offer">
+          <div class="offer-content">
+            <h3>Special Offer</h3>
+            <p>Enjoy {{ section.settings.discount_amount }}% off your next order</p>
+            <div class="discount-code">
+              <code>{{ section.settings.discount_code }}</code>
+              <small>Valid for 7 days</small>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+
+      {% if section.settings.show_social_sharing %}
+        <div class="social-sharing">
+          <h3>Stay Connected</h3>
+          <div class="social-links">
+            {% if section.settings.instagram_handle %}
+              <a href="https://instagram.com/{{ section.settings.instagram_handle }}" class="social-link">
+                {% render 'icon-instagram' %}
+              </a>
+            {% endif %}
+            {% if section.settings.facebook_handle %}
+              <a href="https://facebook.com/{{ section.settings.facebook_handle }}" class="social-link">
+                {% render 'icon-facebook' %}
+              </a>
+            {% endif %}
+          </div>
+        </div>
+      {% endif %}
+
+      {% if section.settings.show_product_guide %}
+        <div class="product-resources">
+          <h3>Product Resources</h3>
+          <div class="resource-links">
+            {% if section.settings.guide_pdf %}
+              <a href="{{ section.settings.guide_pdf }}" class="resource-link">
+                <span class="icon">{% render 'icon-pdf' %}</span>
+                Product Guide
+              </a>
+            {% endif %}
+            {% if section.settings.tutorial_video %}
+              <a href="{{ section.settings.tutorial_video }}" class="resource-link">
+                <span class="icon">{% render 'icon-video' %}</span>
+                Tutorial Video
+              </a>
+            {% endif %}
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Thank You Page",
+  "settings": [
+    {
+      "type": "text",
+      "id": "whatsapp_number",
+      "label": "WhatsApp Number",
+      "info": "Include country code (e.g., 27831234567)"
+    },
+    {
+      "type": "header",
+      "content": "Special Offer"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_next_order_discount",
+      "label": "Show next order discount",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "discount_code",
+      "label": "Discount Code"
+    },
+    {
+      "type": "range",
+      "id": "discount_amount",
+      "min": 5,
+      "max": 30,
+      "step": 5,
+      "label": "Discount Amount",
+      "default": 10
+    },
+    {
+      "type": "header",
+      "content": "Social Media"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_social_sharing",
+      "label": "Show social media links",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "instagram_handle",
+      "label": "Instagram Handle"
+    },
+    {
+      "type": "text",
+      "id": "facebook_handle",
+      "label": "Facebook Handle"
+    },
+    {
+      "type": "header",
+      "content": "Product Resources"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_product_guide",
+      "label": "Show product resources",
+      "default": true
+    },
+    {
+      "type": "url",
+      "id": "guide_pdf",
+      "label": "Product Guide PDF"
+    },
+    {
+      "type": "url",
+      "id": "tutorial_video",
+      "label": "Tutorial Video URL"
+    }
+  ]
+}
+{% endschema %}
