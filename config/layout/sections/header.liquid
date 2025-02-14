@@ -1,0 +1,71 @@
+<div data-section-id="{{ section.id }}" data-section-type="header">
+  <header class="site-header{% if section.settings.enable_sticky_header %} sticky{% endif %}">
+    <div class="container">
+      <div class="header-wrapper">
+        <div class="header-logo">
+          {% if template.name == 'index' %}
+            <h1 class="header-logo__heading">
+          {% else %}
+            <div class="header-logo__heading">
+          {% endif %}
+              
+          <a href="/" class="header-logo__link">
+            {% if section.settings.logo != blank %}
+              {% assign image_size = section.settings.logo_max_width | append: 'x' %}
+              <img src="{{ section.settings.logo | img_url: image_size }}"
+                   alt="{{ section.settings.logo.alt | default: shop.name }}"
+                   width="{{ section.settings.logo_max_width }}"
+                   height="{{ section.settings.logo.height | times: section.settings.logo_max_width | divided_by: section.settings.logo.width }}">
+            {% else %}
+              {{ shop.name }}
+            {% endif %}
+          </a>
+
+          {% if template.name == 'index' %}
+            </h1>
+          {% else %}
+            </div>
+          {% endif %}
+        </div>
+
+        <nav class="header-nav" role="navigation">
+          {% include 'navigation-menu' %}
+        </nav>
+
+        <div class="header-icons">
+          {% include 'search-bar' %}
+          {% include 'cart-icon' %}
+        </div>
+      </div>
+    </div>
+  </header>
+</div>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo image"
+    },
+    {
+      "type": "range",
+      "id": "logo_max_width",
+      "min": 50,
+      "max": 450,
+      "step": 10,
+      "unit": "px",
+      "label": "Logo width",
+      "default": 200
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sticky_header",
+      "label": "Enable sticky header",
+      "default": true
+    }
+  ]
+}
+{% endschema %}
