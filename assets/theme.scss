@@ -1,0 +1,89 @@
+// Variables
+$color-primary: #1B3651;
+$color-secondary: #666666;
+$color-accent: #F47458;
+$color-background: #FFFFFF;
+$color-text: #000000;
+
+// Typography
+$font-heading: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+$font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+
+// Breakpoints
+$breakpoint-small: 576px;
+$breakpoint-medium: 768px;
+$breakpoint-large: 992px;
+$breakpoint-xlarge: 1200px;
+
+// Base styles
+body {
+  margin: 0;
+  font-family: $font-body;
+  color: $color-primary;
+  background-color: $color-background;
+}
+
+// Header styles
+.site-header {
+  position: relative;
+  padding: 1rem 0;
+  background: $color-background;
+  
+  &.sticky {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 100;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+}
+
+// Hero Banner styles
+.hero-banner {
+  position: relative;
+  
+  &__image {
+    width: 100%;
+    height: 600px;
+    
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+  
+  &__content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: white;
+    
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+  }
+}
+
+// Button styles
+.button {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  
+  &--primary {
+    background-color: $color-accent;
+    color: white;
+    
+    &:hover {
+      background-color: darken($color-accent, 10%);
+    }
+  }
+}
