@@ -1,9 +1,10 @@
 <div data-section-id="{{ section.id }}" data-section-type="header">
-  <header class="site-header{% if section.settings.enable_sticky_header %} sticky{% endif %}">
+  <header class="site-header{% if section.settings.enable_sticky_header %} sticky{% endif %}" 
+          style="background-color: {{ section.settings.header_background }}">
     <div class="container">
       <div class="header-wrapper">
         <!-- Logo -->
-        <div class="header-logo">
+        <div class="header-logo{% if section.settings.center_logo %} header-logo--center{% endif %}">
           {% if template.name == 'index' %}
             <h1 class="header-logo__heading">
           {% else %}
@@ -16,7 +17,7 @@
               <img src="{{ section.settings.logo | img_url: image_size }}"
                    alt="{{ section.settings.logo.alt | default: shop.name }}"
                    width="{{ section.settings.logo_max_width }}"
-                   height="{{ section.settings.logo.height | times: section.settings.logo_max_width | divided_by: section.settings.logo.width }}">
+                   {% if section.settings.enable_lazy_loading %}loading="lazy"{% endif %}>
             {% else %}
               {{ shop.name }}
             {% endif %}
@@ -31,10 +32,23 @@
 
         <!-- Navigation -->
         <nav class="header-nav" role="navigation">
-          {% if section.settings.enable_mega_menu %}
-            {% include 'mega-menu' %}
-          {% else %}
-            {% include 'navigation-menu' %}
+          {% if section.settings.menu != blank %}
+            <ul class="nav-menu">
+              {% for link in linklists[section.settings.menu].links %}
+                <li class="nav-menu__item{% if link.links.size > 0 %} has-dropdown{% endif %}">
+                  <a href="{{ link.url }}" class="nav-menu__link">{{ link.title }}</a>
+                  {% if link.links.size > 0 and section.settings.enable_mega_menu %}
+                    <div class="mega-menu">
+                      <ul>
+                        {% for childlink in link.links %}
+                          <li><a href="{{ childlink.url }}">{{ childlink.title }}</a></li>
+                        {% endfor %}
+                      </ul>
+                    </div>
+                  {% endif %}
+                </li>
+              {% endfor %}
+            </ul>
           {% endif %}
         </nav>
 
@@ -42,12 +56,52 @@
         <div class="header-actions">
           {% if section.settings.enable_search %}
             <div class="header-search">
-              {% include 'search-bar' %}
+              <button type="button" class="search-toggle" aria-label="Toggle search">
+                {% render 'icon-search' %}
+              </button>
+              <div class="search-popup">
+                <form action="/search" method="get" class="search-form">
+                  <input type="search" 
+                         name="q" 
+                         placeholder="{{ 'general.search.placeholder' | t }}"
+                         aria-label="{{ 'general.search.placeholder' | t }}">
+                  <button type="submit">{{ 'general.search.submit' | t }}</button>
+                </form>
+              </div>
+            </div>
+          {% endif %}
+
+          {% if section.settings.enable_account %}
+            <div class="header-account">
+              {% if customer %}
+                <a href="/account" class="account-link">
+                  {% render 'icon-account' %}
+                  {% if section.settings.show_account_label %}
+                    <span>{{ 'customer.account.title' | t }}</span>
+                  {% endif %}
+                </a>
+              {% else %}
+                <a href="/account/login" class="account-link">
+                  {% render 'icon-account' %}
+                  {% if section.settings.show_account_label %}
+                    <span>{{ 'customer.login.title' | t }}</span>
+                  {% endif %}
+                </a>
+              {% endif %}
             </div>
           {% endif %}
 
           {% if section.settings.enable_cart %}
-            {% include 'cart-icon' %}
+            <div class="header-cart">
+              <button type="button" 
+                      class="cart-toggle{% if section.settings.enable_cart_drawer %} cart-drawer-toggle{% endif %}"
+                      aria-label="Toggle cart">
+                {% render 'icon-cart' %}
+                {% if section.settings.show_cart_count %}
+                  <span class="cart-count">{{ cart.item_count }}</span>
+                {% endif %}
+              </button>
+            </div>
           {% endif %}
         </div>
       </div>
@@ -61,70 +115,129 @@
   "settings": [
     {
       "type": "header",
-      "content": "Logo Settings"
+      "content": "🎨 Layout & Design",
+      "info": "Customize your header's appearance"
     },
     {
       "type": "image_picker",
       "id": "logo",
-      "label": "Logo image"
+      "label": "Logo image",
+      "info": "Recommended size: 200 x 60px"
     },
     {
       "type": "range",
       "id": "logo_max_width",
       "min": 50,
-      "max": 450,
+      "max": 300,
       "step": 10,
       "unit": "px",
       "label": "Logo width",
-      "default": 200
+      "default": 200,
+      "info": "Adjust your logo size for optimal display"
+    },
+    {
+      "type": "checkbox",
+      "id": "center_logo",
+      "label": "Center logo",
+      "default": false,
+      "info": "Center align your logo for a balanced layout"
+    },
+    {
+      "type": "color",
+      "id": "header_background",
+      "label": "Background color",
+      "default": "#ffffff",
+      "info": "Choose a background color that matches your brand"
     },
     {
       "type": "header",
-      "content": "Layout Options"
+      "content": "⚡ Performance Features",
+      "info": "Optimize your header's performance"
     },
     {
       "type": "checkbox",
       "id": "enable_sticky_header",
       "label": "Enable sticky header",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "enable_mega_menu",
-      "label": "Enable mega menu",
-      "default": false
-    },
-    {
-      "type": "header",
-      "content": "Features"
-    },
-    {
-      "type": "checkbox",
-      "id": "enable_search",
-      "label": "Enable search",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "enable_cart",
-      "label": "Enable cart icon",
-      "default": true
-    },
-    {
-      "type": "header",
-      "content": "Performance"
+      "default": true,
+      "info": "Keep header visible while scrolling (Recommended for better navigation)"
     },
     {
       "type": "checkbox",
       "id": "enable_lazy_loading",
       "label": "Enable lazy loading",
-      "default": true
+      "default": true,
+      "info": "Improve page load speed by loading images only when needed"
+    },
+    {
+      "type": "header",
+      "content": "🔍 Search & Navigation",
+      "info": "Configure search and menu options"
     },
     {
       "type": "checkbox",
-      "id": "enable_animations",
-      "label": "Enable animations",
-      "default": true
+      "id": "enable_search",
+      "label": "Enable search",
+      "default": true,
+      "info": "Add a search function to help customers find products"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "default": "main-menu",
+      "info": "Select which menu to display in header"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_mega_menu",
+      "label": "Enable mega menu",
+      "default": false,
+      "info": "Transform dropdowns into mega menus (Better for large catalogs)"
+    },
+    {
+      "type": "header",
+      "content": "👤 Account Features",
+      "info": "Customize account display options"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_account",
+      "label": "Show account icon",
+      "default": true,
+      "info": "Display account login/dashboard link"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_account_label",
+      "label": "Show account text",
+      "default": false,
+      "info": "Display 'Account' text beside icon"
+    },
+    {
+      "type": "header",
+      "content": "🛒 Cart Features",
+      "info": "Configure cart display options"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_cart",
+      "label": "Show cart icon",
+      "default": true,
+      "info": "Display shopping cart icon"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_cart_drawer",
+      "label": "Enable cart drawer",
+      "default": true,
+      "info": "Show cart as a sidebar (Recommended for better conversion)"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cart_count",
+      "label": "Show cart count",
+      "default": true,
+      "info": "Display number of items in cart"
     }
   ]
 }
