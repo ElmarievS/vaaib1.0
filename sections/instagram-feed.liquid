@@ -1,0 +1,212 @@
+<div class="instagram-feed" 
+     data-section-id="{{ section.id }}"
+     data-section-type="instagram-feed"
+     style="background-color: {{ section.settings.background_color }}">
+  <div class="container">
+    {% if section.settings.title != blank %}
+      <div class="section-header">
+        <h2 class="section-title">{{ section.settings.title }}</h2>
+        {% if section.settings.subtitle != blank %}
+          <div class="section-subtitle">{{ section.settings.subtitle }}</div>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <div class="instagram-grid" 
+         style="--grid-columns: {{ section.settings.columns_desktop }};">
+      {% for block in section.blocks %}
+        {% if block.type == 'instagram_post' %}
+          <div class="instagram-item" {{ block.shopify_attributes }}>
+            {% if block.settings.image != blank %}
+              <a href="{{ block.settings.link }}" 
+                 class="instagram-link"
+                 target="_blank" 
+                 rel="noopener">
+                <img src="{{ block.settings.image | img_url: '600x' }}"
+                     alt="{{ block.settings.caption | escape }}"
+                     width="600"
+                     height="600"
+                     loading="lazy">
+                {% if section.settings.show_overlay %}
+                  <div class="instagram-overlay">
+                    {% render 'icon-instagram' %}
+                    {% if block.settings.likes != blank or block.settings.comments != blank %}
+                      <div class="instagram-stats">
+                        {% if block.settings.likes != blank %}
+                          <span>{{ block.settings.likes }} likes</span>
+                        {% endif %}
+                        {% if block.settings.comments != blank %}
+                          <span>{{ block.settings.comments }} comments</span>
+                        {% endif %}
+                      </div>
+                    {% endif %}
+                  </div>
+                {% endif %}
+              </a>
+            {% endif %}
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    {% if section.settings.show_follow_button %}
+      <div class="instagram-footer">
+        <a href="{{ section.settings.instagram_url }}" 
+           class="button button--{{ section.settings.button_style }}"
+           target="_blank" 
+           rel="noopener">
+          {% render 'icon-instagram' %}
+          {{ section.settings.follow_text }}
+        </a>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Instagram Feed",
+  "settings": [
+    {
+      "type": "header",
+      "content": "📝 Content",
+      "info": "Add section heading and content"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Follow us on Instagram"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subheading",
+      "default": "Share your style with #YourBrand"
+    },
+    {
+      "type": "header",
+      "content": "🎨 Layout",
+      "info": "Customize feed appearance"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 3,
+      "max": 6,
+      "step": 1,
+      "label": "Columns on desktop",
+      "default": 4
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "🔲 Display Options",
+      "info": "Configure feed display settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_overlay",
+      "label": "Show hover overlay",
+      "default": true,
+      "info": "Display Instagram icon and stats on hover"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_follow_button",
+      "label": "Show follow button",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "follow_text",
+      "label": "Follow button text",
+      "default": "Follow on Instagram"
+    },
+    {
+      "type": "url",
+      "id": "instagram_url",
+      "label": "Instagram URL",
+      "info": "Your Instagram profile URL"
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "Button style",
+      "options": [
+        {
+          "value": "primary",
+          "label": "Primary"
+        },
+        {
+          "value": "secondary",
+          "label": "Secondary"
+        },
+        {
+          "value": "outline",
+          "label": "Outline"
+        }
+      ],
+      "default": "primary"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "instagram_post",
+      "name": "Post",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "1:1 ratio recommended"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Post URL"
+        },
+        {
+          "type": "text",
+          "id": "caption",
+          "label": "Caption"
+        },
+        {
+          "type": "text",
+          "id": "likes",
+          "label": "Likes count"
+        },
+        {
+          "type": "text",
+          "id": "comments",
+          "label": "Comments count"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Instagram Feed",
+      "blocks": [
+        {
+          "type": "instagram_post"
+        },
+        {
+          "type": "instagram_post"
+        },
+        {
+          "type": "instagram_post"
+        },
+        {
+          "type": "instagram_post"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
