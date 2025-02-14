@@ -1,0 +1,68 @@
+<div class="hero-banner" data-section-id="{{ section.id }}">
+  {% if section.settings.image != blank %}
+    <div class="hero-banner__image">
+      <img src="{{ section.settings.image | img_url: '2000x' }}"
+           alt="{{ section.settings.title | escape }}"
+           loading="lazy">
+    </div>
+  {% endif %}
+  
+  <div class="hero-banner__content">
+    <div class="container">
+      {% if section.settings.title != blank %}
+        <h1>{{ section.settings.title }}</h1>
+      {% endif %}
+      
+      {% if section.settings.text != blank %}
+        <div class="hero-banner__text">{{ section.settings.text }}</div>
+      {% endif %}
+      
+      {% if section.settings.button_link != blank %}
+        <a href="{{ section.settings.button_link }}" class="button button--primary">
+          {{ section.settings.button_text | default: 'Shop Now' }}
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Hero Banner",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Banner Image"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Welcome to our store"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Shop Now"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero Banner",
+      "category": "Image"
+    }
+  ]
+}
+{% endschema %}
