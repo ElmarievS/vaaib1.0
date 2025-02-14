@@ -1,0 +1,206 @@
+<div class="product-highlights" 
+     data-section-id="{{ section.id }}"
+     data-section-type="product-highlights"
+     {% if section.settings.enable_animation %}data-aos="fade-up"{% endif %}>
+  <div class="container">
+    {% if section.settings.title != blank %}
+      <div class="section-header">
+        <h2 class="section-title">{{ section.settings.title }}</h2>
+        {% if section.settings.subtitle != blank %}
+          <div class="section-subtitle">{{ section.settings.subtitle }}</div>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <div class="highlights-grid" style="--grid-columns: {{ section.settings.columns_desktop }};">
+      {% for block in section.blocks %}
+        <div class="highlight-item" 
+             {{ block.shopify_attributes }}
+             {% if settings.enable_animation %}
+             data-aos="fade-up" 
+             data-aos-delay="{{ forloop.index | times: 150 }}"
+             {% endif %}>
+          {% if block.settings.image != blank %}
+            <div class="highlight-image">
+              <img src="{{ block.settings.image | img_url: '400x' }}"
+                   alt="{{ block.settings.title | escape }}"
+                   width="400"
+                   height="400"
+                   {% if settings.enable_lazy_loading %}loading="lazy"{% endif %}
+                   {% if settings.enable_image_optimization %}
+                   srcset="{{ block.settings.image | img_url: '200x' }} 200w,
+                           {{ block.settings.image | img_url: '400x' }} 400w"
+                   sizes="(max-width: 768px) 200px, 400px"
+                   {% endif %}>
+            </div>
+          {% endif %}
+          
+          <div class="highlight-content">
+            <h3>{{ block.settings.title }}</h3>
+            {% if block.settings.text != blank %}
+              <div class="highlight-text">{{ block.settings.text }}</div>
+            {% endif %}
+            
+            {% if block.settings.button_label != blank and block.settings.button_link != blank %}
+              <a href="{{ block.settings.button_link }}" 
+                 class="button button--{{ block.settings.button_style | default: 'secondary' }}">
+                {{ block.settings.button_label }}
+              </a>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Product Highlights",
+  "settings": [
+    {
+      "type": "header",
+      "content": "📝 Content",
+      "info": "Add section heading and layout options"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Why Choose Our Products"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subheading",
+      "info": "Optional explanatory text"
+    },
+    {
+      "type": "header",
+      "content": "🎨 Layout",
+      "info": "Customize the section layout"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "label": "Columns on desktop",
+      "default": 3
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout style",
+      "options": [
+        {
+          "value": "grid",
+          "label": "Grid"
+        },
+        {
+          "value": "slider",
+          "label": "Slider"
+        }
+      ],
+      "default": "grid"
+    },
+    {
+      "type": "header",
+      "content": "⚡ Animation",
+      "info": "Configure animation settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_animation",
+      "label": "Enable animations",
+      "default": true,
+      "info": "Animate items as they scroll into view"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "highlight",
+      "name": "Feature",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "400 x 400px recommended"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Feature Title"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Share details about your product's unique features</p>"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link"
+        },
+        {
+          "type": "select",
+          "id": "button_style",
+          "label": "Button style",
+          "options": [
+            {
+              "value": "primary",
+              "label": "Primary"
+            },
+            {
+              "value": "secondary",
+              "label": "Secondary"
+            },
+            {
+              "value": "outline",
+              "label": "Outline"
+            }
+          ],
+          "default": "secondary"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Highlights",
+      "blocks": [
+        {
+          "type": "highlight",
+          "settings": {
+            "title": "Quality Materials",
+            "text": "<p>Only the finest materials go into our products</p>"
+          }
+        },
+        {
+          "type": "highlight",
+          "settings": {
+            "title": "Expert Craftsmanship",
+            "text": "<p>Skilled artisans create each piece with care</p>"
+          }
+        },
+        {
+          "type": "highlight",
+          "settings": {
+            "title": "Customer Satisfaction",
+            "text": "<p>100% satisfaction guaranteed on every purchase</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
