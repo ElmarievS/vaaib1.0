@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="{{ shop.locale }}" class="no-js{% if settings.enable_animations %} animations-enabled{% endif %}">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="{{ settings.accent_color }}">
+  
+  <link rel="canonical" href="{{ canonical_url }}">
+  <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+  
+  <title>
+    {{ page_title }}{% if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif %}{% if current_page != 1 %} &ndash; Page {{ current_page }}{% endif %}{% unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless %}
+  </title>
+
+  {% if page_description %}
+    <meta name="description" content="{{ page_description | escape }}">
+  {% endif %}
+
+  {% if settings.enable_critical_css %}
+    <style>
+      {% render 'critical-css' %}
+    </style>
+  {% endif %}
+
+  {{ 'theme.css' | asset_url | stylesheet_tag }}
+  
+  {% if settings.enable_quick_view or settings.enable_cart_drawer %}
+    {{ 'components.css' | asset_url | stylesheet_tag }}
+  {% endif %}
+  
+  <script>document.documentElement.className = document.documentElement.className.replace('no-js', 'js');</script>
+  <script src="{{ 'theme.js' | asset_url }}" defer="defer"></script>
+  {{ content_for_header }}
+</head>
+
+<body class="template-{{ template | split: '.' | first }}{% if settings.enable_animations %} animations-enabled{% endif %}">
+  <a class="skip-to-content-link" href="#MainContent">
+    {{ "accessibility.skip_to_text" | t }}
+  </a>
+
+  {% section 'announcement-bar' %}
+  {% section 'header' %}
+
+  <main role="main" id="MainContent" class="main-content">
+    {{ content_for_layout }}
+  </main>
+
+  {% section 'footer' %}
+
+  {% if settings.enable_cart_drawer %}
+    {% section 'cart-drawer' %}
+  {% endif %}
+
+  {% if settings.enable_quick_view %}
+    {% section 'quick-view' %}
+  {% endif %}
+</body>
+</html>
