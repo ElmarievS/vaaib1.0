@@ -1,0 +1,39 @@
+<div class="product-rating" 
+     aria-label="{{ rating | round: 1 }} out of 5 stars"
+     role="img">
+  {%- assign rating_decimal = rating | modulo: 1 -%}
+  {%- assign rating_floor = rating | floor -%}
+  
+  <!-- Full stars -->
+  {%- for i in (1..rating_floor) -%}
+    <span class="star star--full">
+      <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-star" viewBox="0 0 24 24">
+        <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+      </svg>
+    </span>
+  {%- endfor -%}
+
+  <!-- Partial star -->
+  {%- if rating_decimal > 0 -%}
+    <span class="star star--half">
+      <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-star-half" viewBox="0 0 24 24">
+        <path d="M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27V2z"/>
+        <path class="star-half" d="M12 2v15.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2z" fill-opacity="0.3"/>
+      </svg>
+    </span>
+  {%- endif -%}
+
+  <!-- Empty stars -->
+  {%- assign empty_stars = 5 | minus: rating | floor -%}
+  {%- for i in (1..empty_stars) -%}
+    <span class="star star--empty">
+      <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-star" viewBox="0 0 24 24">
+        <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill-opacity="0.3"/>
+      </svg>
+    </span>
+  {%- endfor -%}
+
+  {% if show_count and rating_count %}
+    <span class="rating-count">({{ rating_count }})</span>
+  {% endif %}
+</div>
