@@ -3,205 +3,177 @@
     "name": "theme_info",
     "theme_name": "Vaaib",
     "theme_version": "1.0.0",
-    "theme_author": "Vaaib Team",
+    "theme_author": "ElmarieVS",
     "theme_documentation_url": "",
     "theme_support_url": ""
   },
   {
-    "name": "🎨 Colors",
+    "name": "Colors",
     "settings": [
       {
         "type": "color",
-        "id": "primary_color",
+        "id": "color_primary",
         "label": "Primary Color",
-        "default": "#1B3651",
-        "info": "Main brand color, used for buttons and accents"
+        "default": "#1B3651"
       },
       {
         "type": "color",
-        "id": "secondary_color",
+        "id": "color_secondary",
         "label": "Secondary Color",
-        "default": "#F47458",
-        "info": "Complementary color for additional elements"
+        "default": "#666666"
       },
       {
         "type": "color",
-        "id": "text_color",
-        "label": "Text Color",
-        "default": "#000000",
-        "info": "Main text color throughout the site"
+        "id": "color_accent",
+        "label": "Accent Color",
+        "default": "#F47458"
       },
       {
         "type": "color",
-        "id": "background_color",
+        "id": "color_background",
         "label": "Background Color",
-        "default": "#FFFFFF",
-        "info": "Main background color"
+        "default": "#FFFFFF"
+      },
+      {
+        "type": "color",
+        "id": "color_text",
+        "label": "Text Color",
+        "default": "#000000"
       }
     ]
   },
   {
-    "name": "⚡ Performance",
+    "name": "Typography",
     "settings": [
       {
-        "type": "header",
-        "content": "Loading Optimizations"
+        "type": "font_picker",
+        "id": "type_header_font",
+        "label": "Heading Font",
+        "default": "helvetica_n4"
       },
       {
-        "type": "checkbox",
-        "id": "enable_lazy_loading",
-        "label": "Enable lazy loading",
-        "default": true,
-        "info": "Improve page load speed by loading images only when needed"
-      },
-      {
-        "type": "checkbox",
-        "id": "enable_image_optimization",
-        "label": "Enable image optimization",
-        "default": true,
-        "info": "Automatically optimize and compress images"
-      },
-      {
-        "type": "checkbox",
-        "id": "enable_critical_css",
-        "label": "Enable critical CSS",
-        "default": true,
-        "info": "Load essential styles first for faster initial render"
-      }
-    ]
-  },
-  {
-    "name": "🛍️ Product Cards",
-    "settings": [
-      {
-        "type": "header",
-        "content": "Display Options"
-      },
-      {
-        "type": "checkbox",
-        "id": "show_vendor",
-        "label": "Show vendor",
-        "default": false,
-        "info": "Display product manufacturer or brand"
-      },
-      {
-        "type": "checkbox",
-        "id": "show_rating",
-        "label": "Show product rating",
-        "default": true,
-        "info": "Display product review stars"
-      },
-      {
-        "type": "checkbox",
-        "id": "show_color_swatches",
-        "label": "Show color swatches",
-        "default": true,
-        "info": "Display color options on product cards"
-      },
-      {
-        "type": "header",
-        "content": "Quick Shop Features"
-      },
-      {
-        "type": "checkbox",
-        "id": "enable_quick_view",
-        "label": "Enable quick view",
-        "default": true,
-        "info": "Allow customers to preview products without leaving the page"
-      },
-      {
-        "type": "checkbox",
-        "id": "enable_quick_add",
-        "label": "Enable quick add to cart",
-        "default": true,
-        "info": "Allow customers to add products directly from collection pages"
-      },
-      {
-        "type": "header",
-        "content": "Inventory Display"
-      },
-      {
-        "type": "checkbox",
-        "id": "show_inventory_notice",
-        "label": "Show low stock notice",
-        "default": true,
-        "info": "Display warning when product stock is low"
+        "type": "font_picker",
+        "id": "type_body_font",
+        "label": "Body Font",
+        "default": "helvetica_n4"
       },
       {
         "type": "range",
-        "id": "low_inventory_threshold",
-        "min": 1,
+        "id": "base_font_size",
+        "label": "Base Font Size",
+        "default": 16,
+        "min": 14,
         "max": 20,
         "step": 1,
-        "label": "Low inventory threshold",
-        "default": 5,
-        "info": "Show low stock notice when inventory reaches this number"
+        "unit": "px"
       }
     ]
   },
   {
-    "name": "🛒 Cart",
+    "name": "Layout",
     "settings": [
+      {
+        "type": "select",
+        "id": "container_width",
+        "label": "Container Width",
+        "options": [
+          {
+            "value": "1200",
+            "label": "Default (1200px)"
+          },
+          {
+            "value": "1400",
+            "label": "Wide (1400px)"
+          },
+          {
+            "value": "1600",
+            "label": "Extra Wide (1600px)"
+          }
+        ],
+        "default": "1200"
+      }
+    ]
+  },
+  {
+    "name": "Header",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "enable_sticky_header",
+        "label": "Enable Sticky Header",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_search",
+        "label": "Enable Search",
+        "default": true
+      },
       {
         "type": "checkbox",
         "id": "enable_cart_drawer",
-        "label": "Enable cart drawer",
-        "default": true,
-        "info": "Show cart as a sidebar instead of new page (Recommended for better conversion)"
-      },
-      {
-        "type": "checkbox",
-        "id": "enable_sticky_cart",
-        "label": "Enable sticky add to cart",
-        "default": true,
-        "info": "Keep add to cart button visible while scrolling on product pages"
-      },
-      {
-        "type": "checkbox",
-        "id": "show_free_shipping_message",
-        "label": "Show free shipping message",
-        "default": true,
-        "info": "Display progress towards free shipping threshold"
-      },
-      {
-        "type": "text",
-        "id": "free_shipping_threshold",
-        "label": "Free shipping threshold",
-        "default": "50",
-        "info": "Amount needed to qualify for free shipping"
+        "label": "Enable Cart Drawer",
+        "default": true
       }
     ]
   },
   {
-    "name": "🎯 Conversion Features",
+    "name": "Footer",
     "settings": [
       {
         "type": "checkbox",
-        "id": "enable_wishlist",
-        "label": "Enable wishlist",
-        "default": true,
-        "info": "Allow customers to save products for later"
+        "id": "show_payment_icons",
+        "label": "Show Payment Icons",
+        "default": true
       },
       {
         "type": "checkbox",
-        "id": "enable_recently_viewed",
-        "label": "Enable recently viewed",
-        "default": true,
-        "info": "Show recently viewed products"
+        "id": "show_newsletter",
+        "label": "Show Newsletter Signup",
+        "default": true
+      }
+    ]
+  },
+  {
+    "name": "Social Media",
+    "settings": [
+      {
+        "type": "text",
+        "id": "social_facebook_link",
+        "label": "Facebook URL"
+      },
+      {
+        "type": "text",
+        "id": "social_instagram_link",
+        "label": "Instagram URL"
+      },
+      {
+        "type": "text",
+        "id": "social_twitter_link",
+        "label": "Twitter URL"
+      }
+    ]
+  },
+  {
+    "name": "Product Page",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "enable_image_zoom",
+        "label": "Enable Image Zoom",
+        "default": true
       },
       {
         "type": "checkbox",
-        "id": "show_sale_badge",
-        "label": "Show sale badge",
-        "default": true,
-        "info": "Display sale badge on discounted products"
+        "id": "show_quantity_selector",
+        "label": "Show Quantity Selector",
+        "default": true
       },
       {
         "type": "checkbox",
-        "id": "show_saving_amount",
-        "label": "Show saving amount",
-        "default": true,
-        "info": "Display amount saved on sale items"
+        "id": "show_variant_labels",
+        "label": "Show Variant Labels",
+        "default": true
       }
     ]
   }
