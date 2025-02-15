@@ -1,17 +1,84 @@
-// Search Components
-.header-search {
+// Product Card Styles
+.product-card {
   position: relative;
-}
-
-.search-toggle {
-  background: none;
-  border: none;
-  padding: 8px;
-  cursor: pointer;
-  color: currentColor;
+  background: #fff;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   
   &:hover {
-    opacity: 0.8;
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    
+    .hover-image {
+      opacity: 1;
+    }
+    
+    .quick-view-trigger,
+    .quick-add-trigger {
+      opacity: 1;
+    }
+  }
+}
+
+.product-card__image {
+  position: relative;
+  padding-bottom: 100%;
+  overflow: hidden;
+  
+  img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .hover-image {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+}
+
+.badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 4px 8px;
+  border-radius: 3px;
+  font-size: 12px;
+  font-weight: 600;
+  z-index: 2;
+  
+  &.sale {
+    background: $color-accent;
+    color: #fff;
+  }
+  
+  &.sold-out {
+    background: #999;
+    color: #fff;
+  }
+}
+
+.quick-view-trigger,
+.quick-add-trigger {
+  position: absolute;
+  opacity: 0;
+  background: #fff;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  
+  &:hover {
+    background: $color-primary;
+    color: #fff;
   }
   
   svg {
@@ -20,173 +87,118 @@
   }
 }
 
-.search-modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 1000;
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.3s ease;
+.quick-view-trigger {
+  right: 10px;
+  top: 10px;
+}
+
+.quick-add-trigger {
+  right: 10px;
+  bottom: 10px;
   
-  &.is-active {
-    opacity: 1;
-    visibility: visible;
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.product-card__info {
+  padding: 15px;
+}
+
+.product-card__vendor {
+  font-size: 12px;
+  color: $color-secondary;
+  margin-bottom: 5px;
+}
+
+.product-card__title {
+  margin: 0 0 10px;
+  font-size: 14px;
+  font-weight: 500;
+  
+  a {
+    color: inherit;
+    text-decoration: none;
     
-    .search-modal__content {
-      transform: translateY(0);
+    &:hover {
+      color: $color-primary;
     }
   }
 }
 
-.search-modal__content {
-  background: #fff;
-  padding: 20px 0;
-  transform: translateY(-20px);
-  transition: transform 0.3s ease;
-}
-
-.predictive-search {
-  position: relative;
-  max-width: 800px;
-  margin: 0 auto;
-  
-  .search-input-wrapper {
-    position: relative;
-  }
-  
-  .search-input {
-    width: 100%;
-    padding: 12px 50px 12px 20px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 16px;
-    
-    &:focus {
-      outline: none;
-      border-color: $color-primary;
-    }
-  }
-  
-  .search-submit {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    padding: 5px;
-    cursor: pointer;
-    
-    svg {
-      width: 18px;
-      height: 18px;
-    }
-  }
-  
-  .search-close {
-    position: absolute;
-    right: -40px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    padding: 5px;
-    cursor: pointer;
-    color: #fff;
-    
-    svg {
-      width: 18px;
-      height: 18px;
-    }
-  }
-}
-
-.predictive-search__results {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  background: #fff;
-  border: 1px solid #ddd;
-  border-top: none;
-  border-radius: 0 0 4px 4px;
-  max-height: 400px;
-  overflow-y: auto;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.predictive-search__loading {
-  display: none;
-  justify-content: center;
-  padding: 20px;
-  
-  .icon-spinner {
-    animation: spin 1s linear infinite;
-  }
-}
-
-.predictive-search__item {
+.product-card__price {
   display: flex;
   align-items: center;
-  padding: 10px;
-  text-decoration: none;
-  color: inherit;
-  transition: background-color 0.2s;
+  gap: 8px;
+  margin-top: 10px;
   
-  &:hover {
-    background-color: #f5f5f5;
+  .price {
+    font-weight: 600;
+    
+    &--sale {
+      color: $color-accent;
+    }
+    
+    &--compare {
+      text-decoration: line-through;
+      color: $color-secondary;
+      font-size: 0.9em;
+    }
   }
-}
-
-.predictive-search__image {
-  width: 50px;
-  height: 50px;
-  margin-right: 15px;
   
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  .price-saving {
+    font-size: 12px;
+    color: $color-accent;
   }
 }
 
-.predictive-search__info {
-  flex: 1;
-}
-
-.predictive-search__title {
-  font-weight: 500;
-  margin-bottom: 4px;
-}
-
-.predictive-search__price {
-  color: $color-accent;
-  font-weight: 600;
-}
-
-.predictive-search__view-all {
-  display: block;
-  padding: 12px;
-  text-align: center;
-  text-decoration: none;
-  color: $color-primary;
-  border-top: 1px solid #ddd;
-  font-weight: 500;
+// Rating Stars
+.product-rating {
+  display: flex;
+  align-items: center;
+  gap: 2px;
   
-  &:hover {
-    background-color: #f5f5f5;
+  .star {
+    width: 16px;
+    height: 16px;
+    color: #ffc107;
+    
+    svg {
+      width: 100%;
+      height: 100%;
+    }
+    
+    &--empty {
+      color: #e0e0e0;
+    }
+  }
+  
+  .rating-count {
+    margin-left: 5px;
+    font-size: 12px;
+    color: $color-secondary;
   }
 }
 
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
+// Collection Grid
+.collection-grid {
+  display: grid;
+  gap: 20px;
+  
+  &[data-products-per-row="2"] {
+    grid-template-columns: repeat(2, 1fr);
   }
-  to {
-    transform: rotate(360deg);
+  
+  &[data-products-per-row="3"] {
+    grid-template-columns: repeat(3, 1fr);
   }
-}
+  
+  &[data-products-per-row="4"] {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  
+  @media (max-width: $breakpoint-medium) {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  
