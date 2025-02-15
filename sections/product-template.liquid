@@ -1,69 +1,163 @@
-<div class="product-template" data-section-id="{{ section.id }}" data-section-type="product">
+<div class="product-template" 
+     data-section-id="{{ section.id }}"
+     data-product-id="{{ product.id }}"
+     data-enable-history="{{ section.settings.enable_history }}">
   <div class="container">
-    {% if section.settings.enable_breadcrumb %}
-      {% include 'breadcrumb' %}
-    {% endif %}
-
-    <div class="product-layout">
-      <div class="product-media">
-        <div class="product-gallery">
-          {% for image in product.images %}
-            <div class="product-gallery__item">
-              <img src="{{ image | img_url: 'large' }}" 
-                   alt="{{ image.alt | escape }}"
-                   loading="lazy"
-                   data-product-image
-                   {% if forloop.first %}class="active"{% endif %}>
+    <div class="product-content">
+      <!-- Product Images -->
+      <div class="product-gallery">
+        {% if product.images.size > 0 %}
+          <div class="gallery-main">
+            {% for image in product.images %}
+              <div class="gallery-image" data-image-id="{{ image.id }}">
+                <img src="{{ image.src | img_url: '800x' }}"
+                     alt="{{ image.alt | escape }}"
+                     data-zoom-image="{{ image.src | img_url: '1800x' }}"
+                     {% if forloop.first %}loading="eager"{% else %}loading="lazy"{% endif %}>
+              </div>
+            {% endfor %}
+          </div>
+          
+          {% if product.images.size > 1 %}
+            <div class="gallery-thumbs">
+              {% for image in product.images %}
+                <button class="thumb-item{% if forloop.first %} active{% endif %}"
+                        data-image-id="{{ image.id }}">
+                  <img src="{{ image.src | img_url: '100x' }}"
+                       alt="{{ image.alt | escape }}"
+                       loading="lazy">
+                </button>
+              {% endfor %}
             </div>
-          {% endfor %}
-        </div>
+          {% endif %}
+        {% endif %}
       </div>
 
+      <!-- Product Info -->
       <div class="product-info">
-        <h1 class="product-title">{{ product.title }}</h1>
-        
-        {% if section.settings.show_vendor %}
+        {% if section.settings.show_vendor and product.vendor %}
           <div class="product-vendor">{{ product.vendor }}</div>
         {% endif %}
 
+        <h1 class="product-title">{{ product.title }}</h1>
+
+        {% if section.settings.show_rating and product.metafields.reviews.rating %}
+          <div class="product-rating">
+            {% render 'product-rating', 
+              rating: product.metafields.reviews.rating.value,
+              rating_count: product.metafields.reviews.rating_count.value,
+              show_count: true
+            %}
+          </div>
+        {% endif %}
+
         <div class="product-price">
-          <span class="price" data-product-price>
-            {{ current_variant.price | money }}
+          <span class="price" data-regular-price>
+            {{ product.selected_or_first_available_variant.price | money }}
           </span>
           
-          {% if product.compare_at_price_max > product.price %}
-            <span class="compare-price">
-              {{ current_variant.compare_at_price | money }}
+          {% if product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price %}
+            <span class="price price--compare" data-compare-price>
+              {{ product.selected_or_first_available_variant.compare_at_price | money }}
             </span>
+            {% if section.settings.show_saving_amount %}
+              {% assign saving_amount = product.selected_or_first_available_variant.compare_at_price | minus: product.selected_or_first_available_variant.price %}
+              <span class="price-saving">
+                {{ 'products.product.save_amount' | t: amount: saving_amount | money }}
+              </span>
+            {% endif %}
           {% endif %}
         </div>
 
         {% form 'product', product %}
-          <select name="id" id="ProductSelect" class="product-form__variants">
-            {% for variant in product.variants %}
-              <option value="{{ variant.id }}"
-                      {% if variant == current_variant %}selected="selected"{% endif %}>
-                {{ variant.title }} - {{ variant.price | money }}
-              </option>
-            {% endfor %}
-          </select>
+          <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
 
-          <div class="product-form__buttons">
-            <button type="submit" 
-                    class="button button--primary"
-                    {% unless current_variant.available %}disabled{% endunless %}>
-              {% if current_variant.available %}
+          {% if product.has_only_default_variant == false %}
+            {% for option in product.options_with_values %}
+              <div class="product-option">
+                <label class="option-label" for="Option{{ option.position }}">
+                  {{ option.name }}
+                </label>
+
+                {% if section.settings.swatch_options contains option.name %}
+                  <div class="option-swatch" data-option-index="{{ forloop.index0 }}">
+                    {% for value in option.values %}
+                      <input type="radio" 
+                             id="{{ option.name }}-{{ value }}"
+                             name="options[{{ option.name }}]"
+                             value="{{ value }}"
+                             {% if option.selected_value == value %}checked{% endif %}>
+                      <label for="{{ option.name }}-{{ value }}"
+                             class="swatch"
+                             data-value="{{ value | handleize }}">
+                        <span class="swatch-label">{{ value }}</span>
+                      </label>
+                    {% endfor %}
+                  </div>
+                {% else %}
+                  <select id="Option{{ option.position }}"
+                          name="options[{{ option.name }}]"
+                          class="option-select">
+                    {% for value in option.values %}
+                      <option value="{{ value }}"
+                              {% if option.selected_value == value %}selected="selected"{% endif %}>
+                        {{ value }}
+                      </option>
+                    {% endfor %}
+                  </select>
+                {% endif %}
+              </div>
+            {% endfor %}
+          {% endif %}
+
+          <div class="product-quantity">
+            <label for="Quantity">{{ 'products.product.quantity' | t }}</label>
+            <div class="quantity-input">
+              <button type="button" class="quantity-minus" aria-label="Decrease quantity">-</button>
+              <input type="number"
+                     id="Quantity"
+                     name="quantity"
+                     value="1"
+                     min="1"
+                     aria-label="{{ 'products.product.quantity' | t }}">
+              <button type="button" class="quantity-plus" aria-label="Increase quantity">+</button>
+            </div>
+          </div>
+
+          <button type="submit"
+                  name="add"
+                  class="button button--primary button--full {% if section.settings.enable_payment_button %}button--secondary{% endif %}"
+                  {% unless product.available %}disabled{% endunless %}>
+            <span class="button-text">
+              {% if product.available %}
                 {{ 'products.product.add_to_cart' | t }}
               {% else %}
                 {{ 'products.product.sold_out' | t }}
               {% endif %}
-            </button>
-          </div>
+            </span>
+            <span class="loading-spinner" aria-hidden="true">
+              {% render 'icon-spinner' %}
+            </span>
+          </button>
+
+          {% if section.settings.enable_payment_button %}
+            {{ form | payment_button }}
+          {% endif %}
         {% endform %}
 
         {% if section.settings.show_description %}
           <div class="product-description rte">
             {{ product.description }}
+          </div>
+        {% endif %}
+
+        {% if section.settings.show_share_buttons %}
+          <div class="product-share">
+            {% render 'social-sharing', 
+              share_title: product.title,
+              share_permalink: product.url,
+              share_image: product.featured_image
+            %}
           </div>
         {% endif %}
       </div>
@@ -73,13 +167,29 @@
 
 {% schema %}
 {
-  "name": "Product pages",
+  "name": "Product Template",
   "settings": [
     {
+      "type": "header",
+      "content": "🎨 Layout Settings",
+      "info": "Configure product page layout"
+    },
+    {
       "type": "checkbox",
-      "id": "enable_breadcrumb",
-      "label": "Show breadcrumb",
+      "id": "enable_sticky_info",
+      "label": "Enable sticky product info",
       "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_zoom",
+      "label": "Enable image zoom",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "📝 Product Information",
+      "info": "Configure product details display"
     },
     {
       "type": "checkbox",
@@ -89,8 +199,56 @@
     },
     {
       "type": "checkbox",
+      "id": "show_rating",
+      "label": "Show product rating",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_saving_amount",
+      "label": "Show saving amount",
+      "default": true
+    },
+    {
+      "type": "checkbox",
       "id": "show_description",
       "label": "Show description",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "🛒 Purchase Options",
+      "info": "Configure purchase settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_payment_button",
+      "label": "Show dynamic checkout button",
+      "info": "Each customer will see their preferred payment method from those available on your store, such as PayPal or Apple Pay.",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "swatch_options",
+      "label": "Color swatch option names",
+      "default": "Color,Colour",
+      "info": "Comma-separated list of option names to show as swatches"
+    },
+    {
+      "type": "header",
+      "content": "🔄 History & Sharing",
+      "info": "Configure additional features"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_history",
+      "label": "Enable variant URL updating",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_share_buttons",
+      "label": "Show social sharing buttons",
       "default": true
     }
   ]
