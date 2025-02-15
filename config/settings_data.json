@@ -1,53 +1,70 @@
 {
   "current": {
-    "primary_color": "#1B3651",
-    "secondary_color": "#F47458",
-    "text_color": "#000000",
-    "background_color": "#FFFFFF",
-    "accent_color": "#F47458",
-    
-    "enable_lazy_loading": true,
-    "enable_image_optimization": true,
-    "enable_critical_css": true,
-    "enable_animations": true,
-    
-    "show_vendor": true,
-    "show_rating": true,
-    "show_color_swatches": true,
-    "enable_quick_view": true,
-    "enable_quick_add": true,
-    "show_inventory_notice": true,
-    "low_inventory_threshold": 5,
-    
+    "color_primary": "#1B3651",
+    "color_secondary": "#666666",
+    "color_accent": "#F47458",
+    "color_background": "#FFFFFF",
+    "color_text": "#000000",
+    "type_header_font": "helvetica_n4",
+    "type_body_font": "helvetica_n4",
+    "base_font_size": 16,
+    "container_width": "1200",
+    "enable_sticky_header": true,
+    "enable_search": true,
     "enable_cart_drawer": true,
-    "enable_sticky_cart": true,
-    "show_free_shipping_message": true,
-    "free_shipping_threshold": "50",
-    
-    "enable_wishlist": true,
-    "enable_recently_viewed": true,
-    "show_sale_badge": true,
-    "show_saving_amount": true,
-    
+    "show_payment_icons": true,
+    "show_newsletter": true,
     "sections": {
       "header": {
         "type": "header",
         "settings": {
-          "logo_max_width": 200,
-          "enable_sticky_header": true,
+          "enable_sticky": true,
           "enable_search": true,
-          "enable_mega_menu": true,
-          "show_cart_count": true
+          "enable_cart": true,
+          "menu": "main-menu"
+        }
+      },
+      "footer": {
+        "type": "footer",
+        "blocks": {
+          "footer-0": {
+            "type": "text",
+            "settings": {
+              "title": "About Us",
+              "text": "<p>Share store details, promotions, or brand content with your customers.</p>"
+            }
+          },
+          "footer-1": {
+            "type": "links",
+            "settings": {
+              "title": "Quick Links",
+              "menu": "footer"
+            }
+          },
+          "footer-2": {
+            "type": "social",
+            "settings": {
+              "title": "Follow Us"
+            }
+          }
+        },
+        "block_order": [
+          "footer-0",
+          "footer-1",
+          "footer-2"
+        ],
+        "settings": {
+          "show_newsletter": true,
+          "show_payment_methods": true
         }
       },
       "hero-banner": {
         "type": "hero-banner",
         "settings": {
-          "enable_parallax": true,
           "full_width": true,
-          "banner_height": 600,
+          "banner_height": 500,
           "text_alignment": "center",
-          "enable_button_animation": true
+          "enable_parallax": true
         }
       },
       "collection-template": {
@@ -56,48 +73,10 @@
           "products_per_row": 4,
           "products_per_page": 24,
           "enable_sorting": true,
-          "enable_filters": true,
-          "enable_view_options": true,
-          "show_collection_info": true
-        }
-      },
-      "footer": {
-        "type": "footer",
-        "settings": {
-          "show_payment_icons": true,
-          "show_social_icons": true,
-          "enable_newsletter": true
+          "enable_filtering": true,
+          "show_vendor": true
         }
       }
-    }
-  },
-  "presets": {
-    "Modern": {
-      "primary_color": "#1B3651",
-      "secondary_color": "#F47458",
-      "text_color": "#000000",
-      "background_color": "#FFFFFF",
-      "enable_animations": true,
-      "enable_cart_drawer": true,
-      "enable_quick_view": true
-    },
-    "Classic": {
-      "primary_color": "#000000",
-      "secondary_color": "#666666",
-      "text_color": "#333333",
-      "background_color": "#FFFFFF",
-      "enable_animations": false,
-      "enable_cart_drawer": true,
-      "enable_quick_view": false
-    },
-    "Minimal": {
-      "primary_color": "#333333",
-      "secondary_color": "#999999",
-      "text_color": "#000000",
-      "background_color": "#FFFFFF",
-      "enable_animations": false,
-      "enable_cart_drawer": false,
-      "enable_quick_view": false
     }
   }
 }
