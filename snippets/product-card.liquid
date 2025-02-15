@@ -12,10 +12,6 @@
       <span class="badge sold-out">{{ 'products.product.sold_out' | t }}</span>
     {% endif %}
     
-    {% if settings.show_new_badge and product.created_at > date_threshold %}
-      <span class="badge new">{{ 'products.product.new' | t }}</span>
-    {% endif %}
-    
     <a href="{{ product.url }}" class="product-card__image-link">
       {% if product.featured_image %}
         <img src="{{ product.featured_image | img_url: '400x' }}"
@@ -42,8 +38,20 @@
       <button type="button" 
               class="quick-view-trigger"
               data-quick-view-trigger
+              data-product-handle="{{ product.handle }}"
               aria-label="{{ 'products.product.quick_view' | t }}">
         {% render 'icon-quick-view' %}
+      </button>
+    {% endif %}
+
+    {% if settings.enable_quick_add and product.available %}
+      <button type="button" 
+              class="quick-add-trigger"
+              data-quick-add-trigger
+              {% unless product.has_only_default_variant %}disabled{% endunless %}
+              data-variant-id="{{ product.selected_or_first_available_variant.id }}"
+              aria-label="{{ 'products.product.add_to_cart' | t }}">
+        {% render 'icon-cart' %}
       </button>
     {% endif %}
   </div>
@@ -85,34 +93,6 @@
     {% if settings.show_color_swatches and product.variants.size > 1 %}
       <div class="product-card__swatches">
         {% render 'product-swatches', product: product, max_colors: 4 %}
-      </div>
-    {% endif %}
-
-    <div class="product-card__buttons">
-      {% if settings.enable_quick_add and product.available %}
-        <button type="button" 
-                class="button button--primary quick-add"
-                data-quick-add
-                {% unless product.has_only_default_variant %}disabled{% endunless %}
-                data-variant-id="{{ product.selected_or_first_available_variant.id }}">
-          {{ 'products.product.add_to_cart' | t }}
-        </button>
-      {% endif %}
-      
-      {% if settings.enable_wishlist %}
-        <button type="button" 
-                class="button button--wishlist"
-                data-wishlist-trigger
-                data-product-handle="{{ product.handle }}"
-                aria-label="{{ 'products.product.add_to_wishlist' | t }}">
-          {% render 'icon-wishlist' %}
-        </button>
-      {% endif %}
-    </div>
-
-    {% if settings.show_inventory_notice and product.available and product.variants.first.inventory_quantity <= settings.low_inventory_threshold %}
-      <div class="product-card__inventory">
-        {{ 'products.product.low_stock_notice' | t: count: product.variants.first.inventory_quantity }}
       </div>
     {% endif %}
   </div>
