@@ -5,7 +5,9 @@
     "theme_version": "1.0.0",
     "theme_author": "ElmarieVS",
     "theme_documentation_url": "",
-    "theme_support_url": ""
+    {
+  "theme_support_url": "https://vaaibstudio.com/contact-us"
+}
   },
   {
     "name": "Colors",
