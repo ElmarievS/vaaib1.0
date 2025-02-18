@@ -1,59 +1,46 @@
 <!DOCTYPE html>
-<html lang="{{ shop.locale }}" class="no-js{% if settings.enable_animations %} animations-enabled{% endif %}">
+<html lang="{{ shop.locale }}">
 <head>
   <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <meta name="theme-color" content="{{ settings.accent_color }}">
-  
-  <link rel="canonical" href="{{ canonical_url }}">
-  <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
-  
+
+  <!-- SEO Improvements -->
   <title>
-    {{ page_title }}{% if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif %}{% if current_page != 1 %} &ndash; Page {{ current_page }}{% endif %}{% unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless %}
+    {{ page_title }}{% if current_tags %}{% endif %}
+    {%- if current_page != 1 %} - Page {{ current_page }}{% endif -%}
+    {%- unless page_title contains shop.name %} - {{ shop.name }}{% endunless -%}
   </title>
 
   {% if page_description %}
     <meta name="description" content="{{ page_description | escape }}">
   {% endif %}
 
-  {% if settings.enable_critical_css %}
-    <style>
-      {% render 'critical-css' %}
-    </style>
-  {% endif %}
+  <!-- Preload Critical Assets -->
+  <link rel="preload" href="{{ 'theme.css' | asset_url }}" as="style">
+  <link rel="preload" href="{{ 'theme.js' | asset_url }}" as="script">
 
+  <!-- Stylesheets -->
   {{ 'theme.css' | asset_url | stylesheet_tag }}
-  
-  {% if settings.enable_quick_view or settings.enable_cart_drawer %}
-    {{ 'components.css' | asset_url | stylesheet_tag }}
-  {% endif %}
-  
-  <script>document.documentElement.className = document.documentElement.className.replace('no-js', 'js');</script>
+  {{ 'custom.css' | asset_url | stylesheet_tag }}
+
+  <!-- Deferred JavaScript -->
   <script src="{{ 'theme.js' | asset_url }}" defer="defer"></script>
+
+  <!-- Header Content -->
   {{ content_for_header }}
 </head>
 
-<body class="template-{{ template | split: '.' | first }}{% if settings.enable_animations %} animations-enabled{% endif %}">
-  <a class="skip-to-content-link" href="#MainContent">
-    {{ "accessibility.skip_to_text" | t }}
-  </a>
-
+<body class="template-{{ template | split: '.' | first }}">
   {% section 'announcement-bar' %}
   {% section 'header' %}
 
-  <main role="main" id="MainContent" class="main-content">
+  <main role="main" id="MainContent">
     {{ content_for_layout }}
   </main>
 
   {% section 'footer' %}
 
-  {% if settings.enable_cart_drawer %}
-    {% section 'cart-drawer' %}
-  {% endif %}
-
-  {% if settings.enable_quick_view %}
-    {% section 'quick-view' %}
-  {% endif %}
+  <!-- Add any additional scripts or tracking codes here -->
 </body>
 </html>
